@@ -1,11 +1,14 @@
 #!/bin/bash
 
-
+# main menu function
 mainmenu(){
+	# clear screen
 	clear
+	# print date
 	now=$(date)
 	echo $now
 	printdash
+	# print menu options
 	echo "Main Menu"
 	printdash
 	echo "1.  Operating System info"
@@ -19,6 +22,7 @@ mainmenu(){
 	echo "9.  Process operations"
 	echo "10. Exit"
 	echo "Enter your choice [ 1 - 10 ]"
+	# get selection and call appropriate function
 	read menuselect
 	case $menuselect in
 		1)
@@ -52,6 +56,7 @@ mainmenu(){
 			exit 0
 			;;
 		*)
+			# invalid inputs
 			echo "Unknown input! Please try again"
 			read -p "Press [ENTER] key to continue..."
 			mainmenu
@@ -59,15 +64,18 @@ mainmenu(){
 	esac
 }
 
+# helper function for printing dashes on headers
 printdash(){
 	printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
 }
 
+# helper function for returning to main menu
 returntomain(){
 	read -p "Press [ENTER] key to continue..."
 	mainmenu
 }
 
+# helper function to return to file ops menu
 returntofileops(){
 	echo "Enter \":q\" to return to the submenu..."
 	read exitcommand
@@ -150,6 +158,7 @@ myip(){
 	printdash
 	echo "Public IP Information"
 	printdash
+	# get public IP
 	dig +short myip.opendns.com @resolver1.opendns.com
 	returntomain
 }
@@ -168,6 +177,7 @@ mytree(){
 	printdash
 	echo "Home File-tree"
 	printdash
+	# supress errors for unreadable directories
 	./proj1.sh /home/ ~/filetree.html 2>/dev/null
 	returntomain
 }
@@ -176,12 +186,14 @@ fileops(){
 	printdash
 	echo "Process Operations"
 	printdash
+	# print menu options
 	echo "(Please Enter The Number of Your Selection Below)"
 	printf "\n"
 	echo "1. Show All Processes"
 	echo "2. Kill a Process"
 	echo "3. Bring Up Top"
 	echo "4. Return to Main Menu"
+	# get selection
 	read menuselect
         case $menuselect in
                 1)
@@ -218,11 +230,14 @@ showprocess(){
 killprocess(){
 	echo "Please enter the PID of the process you would like to kill:"
 	echo "Enter \":q\" to return to the submenu..."
+	# get PID
 	read processnum
+	# exit if input is :q
         if [ $processnum = ":q" ]
         then
                 fileops
         else
+		# kill process
                 kill $processnum
 		killprocess
      	fi
